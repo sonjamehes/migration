@@ -13,4 +13,4 @@ Azure:
 - commented out some rows in different files which wouldn't allow be to later rebuild the project
 - rebuild the project after I have no errors
 - publish, generate script, check which tables will be created
-- deployed the project to Azure SQL Database
+- deployed the project to Azure SQL DatabasE (I got an error and couldn't deploy the entire project, but I managed to deploy the 2 relevant tables I need)
