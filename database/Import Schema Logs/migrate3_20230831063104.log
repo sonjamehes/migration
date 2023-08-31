@@ -1,0 +1,88 @@
+31/08/2023 20:31:04	This log contains information about the import schema operation into project 'migrate3' on computer 'SONJA' by user 'SonjaMehes'.
+31/08/2023 20:31:05	Import of database schema has started.
+31/08/2023 20:31:12	Gathering database credentials
+31/08/2023 20:31:12	Gathering database options
+31/08/2023 20:31:12	Gathering generic database scoped configuration option
+31/08/2023 20:31:12	Gathering users
+31/08/2023 20:31:12	Gathering roles
+31/08/2023 20:31:12	Gathering application roles
+31/08/2023 20:31:12	Gathering role memberships
+31/08/2023 20:31:12	Gathering filegroups
+31/08/2023 20:31:12	Gathering full-text catalogs
+31/08/2023 20:31:12	Gathering assemblies
+31/08/2023 20:31:12	Gathering certificates
+31/08/2023 20:31:12	Gathering asymmetric keys
+31/08/2023 20:31:12	Gathering symmetric keys
+31/08/2023 20:31:12	Gathering encrypted symmetric keys
+31/08/2023 20:31:12	Gathering schemas
+31/08/2023 20:31:12	Gathering XML schema collections
+31/08/2023 20:31:12	Gathering user-defined data types
+31/08/2023 20:31:12	Gathering user-defined types
+31/08/2023 20:31:12	Gathering table types
+31/08/2023 20:31:12	Gathering unique keys for table types
+31/08/2023 20:31:12	Gathering primary keys for table types
+31/08/2023 20:31:12	Gathering indexes for table types
+31/08/2023 20:31:12	Gathering check constraints for table types
+31/08/2023 20:31:12	Gathering default constraints for table types
+31/08/2023 20:31:12	Gathering partition functions
+31/08/2023 20:31:12	Gathering partition schemes
+31/08/2023 20:31:12	Gathering functions
+31/08/2023 20:31:12	Gathering encrypted functions
+31/08/2023 20:31:12	Gathering aggregates
+31/08/2023 20:31:12	Gathering procedures
+31/08/2023 20:31:12	Gathering encrypted procedures
+31/08/2023 20:31:12	Gathering tables
+31/08/2023 20:31:12	Gathering primary keys
+31/08/2023 20:31:12	Gathering unique constraints
+31/08/2023 20:31:12	Gathering foreign keys
+31/08/2023 20:31:12	Gathering default constraints
+31/08/2023 20:31:12	Gathering check constraints
+31/08/2023 20:31:12	Gathering views
+31/08/2023 20:31:12	Gathering encrypted views
+31/08/2023 20:31:12	Gathering indexes
+31/08/2023 20:31:12	Gathering statistics
+31/08/2023 20:31:12	Gathering full-text index stoplists
+31/08/2023 20:31:12	Gathering search property lists
+31/08/2023 20:31:12	Gathering search properties
+31/08/2023 20:31:12	Gathering full-text indexes
+31/08/2023 20:31:12	Gathering column store indexes
+31/08/2023 20:31:12	Gathering spatial indexes
+31/08/2023 20:31:12	Gathering XML indexes
+31/08/2023 20:31:12	Gathering Selective XML indexes
+31/08/2023 20:31:12	Gathering encrypted triggers
+31/08/2023 20:31:12	Gathering triggers
+31/08/2023 20:31:12	Gathering encrypted and clr ddl triggers
+31/08/2023 20:31:12	Gathering ddl triggers
+31/08/2023 20:31:12	Creating edge constraints
+31/08/2023 20:31:12	Gathering synonyms
+31/08/2023 20:31:12	Gathering defaults
+31/08/2023 20:31:12	Gathering data constraint uddt bindings
+31/08/2023 20:31:12	Gathering rules
+31/08/2023 20:31:12	Gathering data constraint uddt bindings
+31/08/2023 20:31:12	Gathering message types
+31/08/2023 20:31:12	Gathering queues
+31/08/2023 20:31:12	Gathering contracts
+31/08/2023 20:31:12	Gathering services
+31/08/2023 20:31:12	Gathering event notifications
+31/08/2023 20:31:12	Gathering remote service bindings
+31/08/2023 20:31:12	Gathering broker priorities
+31/08/2023 20:31:12	Gathering signatures
+31/08/2023 20:31:12	Gathering compression options
+31/08/2023 20:31:12	Gathering sequence types
+31/08/2023 20:31:12	Gathering security policies
+31/08/2023 20:31:12	Gather column encryption keys
+31/08/2023 20:31:12	Gathering column master keys
+31/08/2023 20:31:12	Gathering external data sources
+31/08/2023 20:31:12	Gathering external file formats
+31/08/2023 20:31:12	Gathering external tables
+31/08/2023 20:31:12	Gathering XML index compression options
+31/08/2023 20:31:12	Gathering extended properties
+31/08/2023 20:31:12	Gathering assemblies
+31/08/2023 20:31:12	Gathering credentials
+31/08/2023 20:31:12	Gathering logins
+31/08/2023 20:31:12	Gathering server audits
+31/08/2023 20:31:13	Scanning project for duplicate elements
+31/08/2023 20:31:13	Finished duplicate element processing
+31/08/2023 20:31:14	Finished importing database.
+31/08/2023 20:31:14	A summary of the import was saved to the following location: C:\Users\SonjaMehes\Projects\migrate3\Import Schema Logs\migrate3_20230831063104.log
+31/08/2023 20:31:14	Click Finish to continue...

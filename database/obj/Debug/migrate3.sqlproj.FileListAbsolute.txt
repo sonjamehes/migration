@@ -1,0 +1,6 @@
+C:\Users\SonjaMehes\Projects\migrate3\bin\Debug\migrate3.dacpac
+C:\Users\SonjaMehes\Projects\migrate3\bin\Debug\migrate3.dll
+C:\Users\SonjaMehes\Projects\migrate3\bin\Debug\migrate3.pdb
+C:\Users\SonjaMehes\Projects\migrate3\obj\Debug\migrate3.sqlproj.AssemblyReference.cache
+C:\Users\SonjaMehes\Projects\migrate3\obj\Debug\migrate3.dll
+C:\Users\SonjaMehes\Projects\migrate3\obj\Debug\migrate3.pdb
