@@ -1,0 +1,8 @@
+# Ignore the entire .vs folder
+.vs/
+obj/
+bin/
+*.dbmdl
+project_name_test.jfm
+*.sqlproj.user
+*.jfm
