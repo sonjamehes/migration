@@ -3,6 +3,5 @@
 obj/
 bin/
 *.dbmdl
-project_name_test.jfm
 *.sqlproj.user
 *.jfm
