@@ -62,7 +62,7 @@
 				]
 			},
 			{
-				"name": "Copy data1",
+				"name": "Copy Blob to AzureSQL",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -86,6 +86,7 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
+							"wildcardFileName": "FactSale",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
