@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADFSonjaDataMigration"
+		},
+		"AzureBlobStorage_connectionString": {
+			"value": ""
+		},
+		"SqlServer_onpremise_connectionString": {
+			"value": "Integrated Security=True;Data Source=Sonja\\SQLEXPRESS;Initial Catalog=WideWorldImportersDW"
+		},
+		"SqlServer_onpremise_password": {
+			"value": ""
+		},
+		"SqlServer_onpremise_properties_typeProperties_userName": {
+			"value": "AzureAD\\SonjaMehes"
+		}
+	}
+}
