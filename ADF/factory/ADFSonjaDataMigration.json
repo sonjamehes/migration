@@ -1,0 +1,9 @@
+{
+	"name": "ADFSonjaDataMigration",
+	"location": "swedencentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "76fb4336-3285-45b3-885d-e2c233e86298",
+		"tenantId": "88ac1ef5-a2a8-4619-8009-08e08e94ca95"
+	}
+}

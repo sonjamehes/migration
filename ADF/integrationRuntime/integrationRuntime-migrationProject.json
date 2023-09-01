@@ -1,0 +1,6 @@
+{
+	"name": "integrationRuntime-migrationProject",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

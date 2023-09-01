@@ -1,0 +1,17 @@
+{
+	"name": "SqlServer_onpremise",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=Sonja\\SQLEXPRESS;initial catalog=WideWorldImportersDW",
+			"userName": "AzureAD\\SonjaMehes",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIwYWM3YTc4Ni0wZDdkLTRlZWMtODliMy02M2RlZTE4MTNiMjEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "integrationRuntime-migrationProject",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
