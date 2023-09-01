@@ -1,5 +1,5 @@
 {
-	"name": "BlobDimCustomer",
+	"name": "dest_BlobDimCustomer",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "DimCustomer",
+				"fileName": "DimCustomer.csv",
 				"container": "migration"
 			},
 			"columnDelimiter": ",",

@@ -1,5 +1,5 @@
 {
-	"name": "BlobFactSales",
+	"name": "dest_BlobFactSales",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage",

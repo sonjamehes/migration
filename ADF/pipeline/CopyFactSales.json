@@ -49,7 +49,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "BlobFactSales",
+						"referenceName": "dest_BlobFactSales",
 						"type": "DatasetReference"
 					}
 				]
@@ -99,7 +99,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "BlobFactSales",
+						"referenceName": "dest_BlobFactSales",
 						"type": "DatasetReference"
 					}
 				],
