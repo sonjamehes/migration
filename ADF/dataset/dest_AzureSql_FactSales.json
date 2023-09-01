@@ -1,5 +1,5 @@
 {
-	"name": "AzureSql_FactSales",
+	"name": "dest_AzureSql_FactSales",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase",
