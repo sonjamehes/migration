@@ -117,8 +117,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "Fact",
-			"table": "Sale"
+			"schema": "Dimension",
+			"table": "Customer"
 		}
 	}
 }
