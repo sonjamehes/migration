@@ -1,5 +1,5 @@
 {
-	"name": "src_BlobDimCustomer",
+	"name": "BlobDimCustomer",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage",

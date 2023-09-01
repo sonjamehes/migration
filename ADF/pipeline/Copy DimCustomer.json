@@ -49,7 +49,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "src_BlobDimCustomer",
+						"referenceName": "BlobDimCustomer",
 						"type": "DatasetReference"
 					}
 				]
@@ -238,7 +238,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "src_BlobDimCustomer",
+						"referenceName": "BlobDimCustomer",
 						"type": "DatasetReference"
 					}
 				],
