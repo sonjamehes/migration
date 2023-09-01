@@ -5,14 +5,7 @@
 			{
 				"name": "Copy On-premise to Blob Storage",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Delete Files If Exists from Blob",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -64,14 +57,9 @@
 			{
 				"name": "Copy Blob to AzureSQL",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Copy On-premise to Blob Storage",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -85,8 +73,7 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"wildcardFileName": "FactSale",
+							"fileListPath": "migration/Fact.Sale.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -95,8 +82,10 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": "truncate table [Fact].[Sale]",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -122,8 +111,10 @@
 				]
 			},
 			{
-				"name": "Delete Files If Exists from Blob",
-				"type": "Delete",
+				"name": "Copy On Prem to AzureSQL",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -134,24 +125,40 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataset": {
-						"referenceName": "BlobFactSales",
-						"type": "DatasetReference"
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
 					},
-					"logStorageSettings": {
-						"linkedServiceName": {
-							"referenceName": "AzureBlobStorage",
-							"type": "LinkedServiceReference"
-						},
-						"path": "migration"
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "Truncate table Fact.Sale",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
 					},
-					"enableLogging": true,
-					"storeSettings": {
-						"type": "AzureBlobStorageReadSettings",
-						"recursive": true,
-						"enablePartitionDiscovery": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "SqlServer_FactSales",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSql_FactSales",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
