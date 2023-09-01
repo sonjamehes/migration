@@ -14,6 +14,9 @@
 		"SqlServer_onpremise_password": {
 			"value": ""
 		},
+		"AzureSqlDatabase_connectionString": {
+			"value": ""
+		},
 		"SqlServer_onpremise_properties_typeProperties_userName": {
 			"value": "AzureAD\\SonjaMehes"
 		}

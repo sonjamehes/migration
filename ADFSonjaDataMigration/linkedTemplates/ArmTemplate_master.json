@@ -20,6 +20,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'SqlServer_onpremise'"
 		},
+		"AzureSqlDatabase_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase'"
+		},
 		"SqlServer_onpremise_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "AzureAD\\SonjaMehes"
@@ -53,6 +57,9 @@
 					},
 					"AzureBlobStorage_connectionString": {
 						"value": "[parameters('AzureBlobStorage_connectionString')]"
+					},
+					"AzureSqlDatabase_connectionString": {
+						"value": "[parameters('AzureSqlDatabase_connectionString')]"
 					},
 					"SqlServer_onpremise_connectionString": {
 						"value": "[parameters('SqlServer_onpremise_connectionString')]"
