@@ -14,7 +14,7 @@ Database:
 - commented out some rows in different files which wouldn't allow be to later rebuild the project
 - rebuild the project after I have no errors
 - publish, generate script, check which tables will be created
-- deployed the project to Azure SQL DatabasE (I got an error and couldn't deploy the entire project, but I managed to deploy the 2 relevant tables I need)
+- deployed the project to Azure SQL DatabasE (I got an error ("'MEMORY_OPTIMIZED tables' is not supported in this service tier of the database. See Books Online for more details on feature support in different service tiers of Azure SQL Database.") and couldn't deploy the entire project, but I managed to deploy all the tables. couldn't deploy the SPs)
 
 ADF:
 - download Integration Runtime so you can create a connection between ADF and on-premise SQL Server
