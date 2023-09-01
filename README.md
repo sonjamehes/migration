@@ -26,5 +26,5 @@ ADF:
 
 
 What could be done better:
-- parametrize it more, especially where I have keys on connections. Those should be kept iz Azure Key Vault
+- parametrize it more, especially where I have keys on connections. These should be kept in Azure Key Vault. Any sensitive data should be kept in Azure Key Vault
 - parametrize more the pipelies , creating a single connection for OnPremise and AzureSQL, and then add parameters (schema_name, table_name) to pick the desired table
