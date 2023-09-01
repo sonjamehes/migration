@@ -1,5 +1,5 @@
 {
-	"name": "AzureSqlTable1",
+	"name": "dest_AzureSQL_DimCustomer",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase",
