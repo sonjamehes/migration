@@ -49,7 +49,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dest_BlobDimCustomer",
+						"referenceName": "src_BlobDimCustomer",
 						"type": "DatasetReference"
 					}
 				]
