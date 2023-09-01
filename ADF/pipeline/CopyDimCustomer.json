@@ -1,5 +1,5 @@
 {
-	"name": "Copy DimCustomer",
+	"name": "CopyDimCustomer",
 	"properties": {
 		"activities": [
 			{
