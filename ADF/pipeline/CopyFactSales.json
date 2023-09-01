@@ -21,14 +21,12 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
+						"type": "ParquetSink",
 						"storeSettings": {
 							"type": "AzureBlobStorageWriteSettings"
 						},
 						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
+							"type": "ParquetWriteSettings"
 						}
 					},
 					"enableStaging": false,
@@ -49,7 +47,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "BlobFactSales",
+						"referenceName": "Blob_Parquet_FactSales",
 						"type": "DatasetReference"
 					}
 				]

@@ -1,0 +1,20 @@
+{
+	"name": "Blob_Parquet_FactSales",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "FactSale",
+				"container": "migration"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
