@@ -94,7 +94,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dest_BlobDimCustomer')]",
+			"name": "[concat(parameters('factoryName'), '/BlobFactSales')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -107,34 +107,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "DimCustomer.csv",
-						"container": "migration"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dest_BlobFactSales')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
+						"fileName": "FactSales.csv",
 						"container": "migration"
 					},
 					"columnDelimiter": ",",
@@ -259,7 +232,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureSql_FactSales')]",
+			"name": "[concat(parameters('factoryName'), '/dest_AzureSql_FactSales')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -517,7 +490,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/src_BlobDimCustomer')]",
+			"name": "[concat(parameters('factoryName'), '/BlobDimCustomer')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -584,6 +557,28 @@
 						"type": "String"
 					}
 				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobContainer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "migration"
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
@@ -790,7 +785,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Copy DimCustomer')]",
+			"name": "[concat(parameters('factoryName'), '/CopyDimCustomer')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -798,8 +793,6 @@
 					{
 						"name": "Copy On-prem to Blob Storage",
 						"type": "Copy",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -845,7 +838,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "dest_BlobDimCustomer",
+								"referenceName": "BlobDimCustomer",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1035,7 +1028,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "src_BlobDimCustomer",
+								"referenceName": "BlobDimCustomer",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1057,8 +1050,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SqlServer_DimCustomer')]",
-				"[concat(variables('factoryId'), '/datasets/dest_BlobDimCustomer')]",
-				"[concat(variables('factoryId'), '/datasets/src_BlobDimCustomer')]",
+				"[concat(variables('factoryId'), '/datasets/BlobDimCustomer')]",
 				"[concat(variables('factoryId'), '/datasets/dest_AzureSQL_DimCustomer')]"
 			]
 		},
@@ -1116,18 +1108,23 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "dest_BlobFactSales",
+								"referenceName": "BlobFactSales",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						]
 					},
 					{
-						"name": "Copy Blob to AzureSQL",
+						"name": "Copy Blob Storage to Azure SQL",
 						"type": "Copy",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Copy On-premise to Blob Storage",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -1141,7 +1138,7 @@
 								"type": "DelimitedTextSource",
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
-									"fileListPath": "migration/Fact.Sale.csv",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -1149,15 +1146,280 @@
 								}
 							},
 							"sink": {
-								"type": "AzureSqlSink",
+								"type": "SqlServerSink",
 								"preCopyScript": "truncate table [Fact].[Sale]",
 								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"disableMetricsCollection": false
+								"sqlWriterUseTableLock": false
 							},
 							"enableStaging": false,
 							"translator": {
 								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Sale Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Sale Key",
+											"type": "Int64",
+											"physicalType": "bigint"
+										}
+									},
+									{
+										"source": {
+											"name": "City Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "City Key",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Customer Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Customer Key",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Bill To Customer Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Bill To Customer Key",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Stock Item Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Stock Item Key",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Invoice Date Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Invoice Date Key",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "Delivery Date Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Delivery Date Key",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "Salesperson Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Salesperson Key",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "WWI Invoice ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "WWI Invoice ID",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Package",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Package",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Quantity",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Quantity",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Unit Price",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Unit Price",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Tax Rate",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Tax Rate",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 3,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total Excluding Tax",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total Excluding Tax",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Tax Amount",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Tax Amount",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Profit",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Profit",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total Including Tax",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total Including Tax",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "Total Dry Items",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total Dry Items",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Total Chiller Items",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total Chiller Items",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Lineage Key",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Lineage Key",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									}
+								],
 								"typeConversion": true,
 								"typeConversionSettings": {
 									"allowDataTruncation": true,
@@ -1167,66 +1429,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "dest_BlobFactSales",
+								"referenceName": "BlobFactSales",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
-							{
-								"referenceName": "AzureSql_FactSales",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "Copy On Prem to AzureSQL",
-						"type": "Copy",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"preCopyScript": "Truncate table Fact.Sale",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
 							{
 								"referenceName": "SqlServer_FactSales",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "AzureSql_FactSales",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1241,8 +1451,103 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SqlServer_FactSales')]",
-				"[concat(variables('factoryId'), '/datasets/dest_BlobFactSales')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSql_FactSales')]"
+				"[concat(variables('factoryId'), '/datasets/BlobFactSales')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MasterCopy')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CopyDim",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Delete Files From Blob",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "CopyDimCustomer",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "CopyFact",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "CopyDim",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "CopyFactSales",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Delete Files From Blob",
+						"type": "Delete",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "BlobContainer",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"logStorageSettings": {
+								"linkedServiceName": {
+									"referenceName": "AzureBlobStorage",
+									"type": "LinkedServiceReference"
+								},
+								"path": "migration"
+							},
+							"enableLogging": true,
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"wildcardFileName": "*",
+								"enablePartitionDiscovery": false
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/CopyDimCustomer')]",
+				"[concat(variables('factoryId'), '/pipelines/CopyFactSales')]",
+				"[concat(variables('factoryId'), '/datasets/BlobContainer')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
 			]
 		}
 	]
