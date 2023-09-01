@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage'"
 		},
+		"AzureSqlDatabase_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase'"
+		},
 		"SqlServer_onpremise_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlServer_onpremise'",
@@ -19,10 +23,6 @@
 		"SqlServer_onpremise_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'SqlServer_onpremise'"
-		},
-		"AzureSqlDatabase_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase'"
 		},
 		"SqlServer_onpremise_properties_typeProperties_userName": {
 			"type": "string",

@@ -8,13 +8,13 @@
 		"AzureBlobStorage_connectionString": {
 			"value": ""
 		},
+		"AzureSqlDatabase_connectionString": {
+			"value": ""
+		},
 		"SqlServer_onpremise_connectionString": {
 			"value": "Integrated Security=True;Data Source=Sonja\\SQLEXPRESS;Initial Catalog=WideWorldImportersDW"
 		},
 		"SqlServer_onpremise_password": {
-			"value": ""
-		},
-		"AzureSqlDatabase_connectionString": {
 			"value": ""
 		},
 		"SqlServer_onpremise_properties_typeProperties_userName": {

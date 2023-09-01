@@ -47,16 +47,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntime-migrationProject')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -70,27 +60,108 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SqlServer_onpremise')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime-migrationProject')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('SqlServer_onpremise_connectionString')]",
-					"userName": "[parameters('SqlServer_onpremise_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('SqlServer_onpremise_password')]"
-					}
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobContainer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage",
+					"type": "LinkedServiceReference"
 				},
-				"connectVia": {
-					"referenceName": "integrationRuntime-migrationProject",
-					"type": "IntegrationRuntimeReference"
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "migration"
+					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-migrationProject')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobDimCustomer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "DimCustomer.csv",
+						"container": "migration"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Customer Key",
+						"type": "String"
+					},
+					{
+						"name": "WWI Customer ID",
+						"type": "String"
+					},
+					{
+						"name": "Customer",
+						"type": "String"
+					},
+					{
+						"name": "Bill To Customer",
+						"type": "String"
+					},
+					{
+						"name": "Category",
+						"type": "String"
+					},
+					{
+						"name": "Buying Group",
+						"type": "String"
+					},
+					{
+						"name": "Primary Contact",
+						"type": "String"
+					},
+					{
+						"name": "Postal Code",
+						"type": "String"
+					},
+					{
+						"name": "Valid From",
+						"type": "String"
+					},
+					{
+						"name": "Valid To",
+						"type": "String"
+					},
+					{
+						"name": "Lineage Key",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
 			]
 		},
 		{
@@ -204,135 +275,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dest_AzureSql_FactSales')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Sale Key",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "City Key",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Customer Key",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Bill To Customer Key",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Stock Item Key",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Invoice Date Key",
-						"type": "date"
-					},
-					{
-						"name": "Delivery Date Key",
-						"type": "date"
-					},
-					{
-						"name": "Salesperson Key",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "WWI Invoice ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Description",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Package",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Quantity",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Unit Price",
-						"type": "decimal",
-						"precision": 18,
-						"scale": 2
-					},
-					{
-						"name": "Tax Rate",
-						"type": "decimal",
-						"precision": 18,
-						"scale": 3
-					},
-					{
-						"name": "Total Excluding Tax",
-						"type": "decimal",
-						"precision": 18,
-						"scale": 2
-					},
-					{
-						"name": "Tax Amount",
-						"type": "decimal",
-						"precision": 18,
-						"scale": 2
-					},
-					{
-						"name": "Profit",
-						"type": "decimal",
-						"precision": 18,
-						"scale": 2
-					},
-					{
-						"name": "Total Including Tax",
-						"type": "decimal",
-						"precision": 18,
-						"scale": 2
-					},
-					{
-						"name": "Total Dry Items",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Total Chiller Items",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Lineage Key",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "Fact",
-					"table": "Sale"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]"
 			]
 		},
 		{
@@ -465,98 +407,156 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/BlobDimCustomer')]",
+			"name": "[concat(parameters('factoryName'), '/dest_AzureSql_FactSales')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage",
+					"referenceName": "AzureSqlDatabase",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "DimCustomer.csv",
-						"container": "migration"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
+				"type": "AzureSqlTable",
 				"schema": [
 					{
+						"name": "Sale Key",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "City Key",
+						"type": "int",
+						"precision": 10
+					},
+					{
 						"name": "Customer Key",
-						"type": "String"
+						"type": "int",
+						"precision": 10
 					},
 					{
-						"name": "WWI Customer ID",
-						"type": "String"
+						"name": "Bill To Customer Key",
+						"type": "int",
+						"precision": 10
 					},
 					{
-						"name": "Customer",
-						"type": "String"
+						"name": "Stock Item Key",
+						"type": "int",
+						"precision": 10
 					},
 					{
-						"name": "Bill To Customer",
-						"type": "String"
+						"name": "Invoice Date Key",
+						"type": "date"
 					},
 					{
-						"name": "Category",
-						"type": "String"
+						"name": "Delivery Date Key",
+						"type": "date"
 					},
 					{
-						"name": "Buying Group",
-						"type": "String"
+						"name": "Salesperson Key",
+						"type": "int",
+						"precision": 10
 					},
 					{
-						"name": "Primary Contact",
-						"type": "String"
+						"name": "WWI Invoice ID",
+						"type": "int",
+						"precision": 10
 					},
 					{
-						"name": "Postal Code",
-						"type": "String"
+						"name": "Description",
+						"type": "nvarchar"
 					},
 					{
-						"name": "Valid From",
-						"type": "String"
+						"name": "Package",
+						"type": "nvarchar"
 					},
 					{
-						"name": "Valid To",
-						"type": "String"
+						"name": "Quantity",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Unit Price",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "Tax Rate",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 3
+					},
+					{
+						"name": "Total Excluding Tax",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "Tax Amount",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "Profit",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "Total Including Tax",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "Total Dry Items",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Total Chiller Items",
+						"type": "int",
+						"precision": 10
 					},
 					{
 						"name": "Lineage Key",
-						"type": "String"
+						"type": "int",
+						"precision": 10
 					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/BlobContainer')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Binary",
+				],
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"container": "migration"
-					}
+					"schema": "Fact",
+					"table": "Sale"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServer_onpremise')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServer_onpremise_connectionString')]",
+					"userName": "[parameters('SqlServer_onpremise_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SqlServer_onpremise_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime-migrationProject",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime-migrationProject')]"
 			]
 		},
 		{
