@@ -1121,8 +1121,7 @@
 								}
 							},
 							"sink": {
-								"type": "SqlServerSink",
-								"preCopyScript": "truncate table [Fact].[Sale]",
+								"type": "AzureSqlSink",
 								"writeBehavior": "insert",
 								"sqlWriterUseTableLock": false
 							},
@@ -1411,7 +1410,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "SqlServer_FactSales",
+								"referenceName": "dest_AzureSql_FactSales",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1426,7 +1425,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SqlServer_FactSales')]",
-				"[concat(variables('factoryId'), '/datasets/BlobFactSales')]"
+				"[concat(variables('factoryId'), '/datasets/BlobFactSales')]",
+				"[concat(variables('factoryId'), '/datasets/dest_AzureSql_FactSales')]"
 			]
 		},
 		{
