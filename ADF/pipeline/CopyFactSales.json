@@ -86,11 +86,15 @@
 						}
 					},
 					"sink": {
-						"type": "AzureSqlSink",
-						"preCopyScript": "Truncate table Fact.Sales",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false,
-						"disableMetricsCollection": false
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -376,7 +380,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dest_AzureSql_FactSales",
+						"referenceName": "BlobFactSales",
 						"type": "DatasetReference"
 					}
 				]
