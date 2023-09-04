@@ -27,4 +27,5 @@ ADF:
 
 What could be done better:
 - parametrize it more, especially where I have keys on connections. These should be kept in Azure Key Vault. Any sensitive data should be kept in Azure Key Vault
-- parametrize more the pipelies , creating a single connection for OnPremise and AzureSQL, and then add parameters (schema_name, table_name) to pick the desired table
+- parametrize more the pipeline
+- if I would need to move the data for all the tables, then I would create for each activity, to loop through the tables 
